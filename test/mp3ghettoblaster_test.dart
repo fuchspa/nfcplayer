@@ -10,30 +10,16 @@ import 'package:test/test.dart';
 
 class FakeAudioPlayer implements AudioPlayer {
   @override
-  Future<void> play(
-    Source source, {
-    double? volume,
-    double? balance,
-    AudioContext? ctx,
-    Duration? position,
-    PlayerMode? mode,
-  }) async {}
-
-  @override
   AudioCache get audioCache => throw UnimplementedError();
 
   @override
-  set audioCache(AudioCache cache) {
-    throw UnimplementedError();
-  }
+  PlayerState get desiredState => throw UnimplementedError();
+
+  @override
+  String get playerId => throw UnimplementedError();
 
   @override
   PlayerState get state => throw UnimplementedError();
-
-  @override
-  set state(PlayerState state) {
-    throw UnimplementedError();
-  }
 
   @override
   double get balance => throw UnimplementedError();
@@ -86,10 +72,15 @@ class FakeAudioPlayer implements AudioPlayer {
   }
 
   @override
-  double get playbackRate => throw UnimplementedError();
+  Future<void> play(Source source,
+      {double? volume,
+      double? balance,
+      AudioContext? ctx,
+      Duration? position,
+      PlayerMode? mode}) async {}
 
   @override
-  String get playerId => throw UnimplementedError();
+  double get playbackRate => throw UnimplementedError();
 
   @override
   Future<void> release() {
@@ -140,22 +131,22 @@ class FakeAudioPlayer implements AudioPlayer {
   }
 
   @override
-  Future<void> setSourceAsset(String path) {
+  Future<void> setSourceAsset(String path, {String? mimeType}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> setSourceBytes(Uint8List bytes) {
+  Future<void> setSourceBytes(Uint8List bytes, {String? mimeType}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> setSourceDeviceFile(String path) {
+  Future<void> setSourceDeviceFile(String path, {String? mimeType}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<void> setSourceUrl(String url) {
+  Future<void> setSourceUrl(String url, {String? mimeType}) {
     throw UnimplementedError();
   }
 
@@ -174,6 +165,26 @@ class FakeAudioPlayer implements AudioPlayer {
 
   @override
   double get volume => throw UnimplementedError();
+
+  @override
+  set audioCache(AudioCache audioCache) {
+    throw UnimplementedError();
+  }
+
+  @override
+  set positionUpdater(PositionUpdater? positionUpdater) {
+    throw UnimplementedError();
+  }
+
+  @override
+  set desiredState(PlayerState desiredState) {
+    throw UnimplementedError();
+  }
+
+  @override
+  set state(PlayerState state) {
+    throw UnimplementedError();
+  }
 }
 
 class FakePermissionProvider extends PermissionProvider {

@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   
   nfc_manager: ^3.3.0
-  audioplayers: ^5.2.1
+  audioplayers: ^6.0.0
   permission_handler: ^11.0.1
   path_provider: ^2.1.1
   file: ^7.0.0
