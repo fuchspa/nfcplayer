@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nfcplayer/andoriddepdencymanager.dart';
+import 'package:nfcplayer/androiddepdencymanager.dart';
 import 'package:nfcplayer/interfaces/depdencymanager.dart';
 import 'package:nfcplayer/pages/homepage.dart';
 
