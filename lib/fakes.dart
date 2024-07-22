@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:nfcplayer/interfaces/audiofilepathprovider.dart';
@@ -175,12 +174,17 @@ class FakeGhettoBlaster extends GhettoBlaster {
 
 class FakeAudioMetaDataProvider extends AudioMetaDataProvider {
   @override
-  Future<AudioMetaData> query(File audioFile) async {
+  Future<AudioMetaData> query(String audioFile) async {
     return AudioMetaData(
       trackNumber: 1,
       trackName: "song",
       interpret: "interpret",
       album: "album",
     );
+  }
+
+  @override
+  Future<List<AudioMetaData>> queryList(List<String> audioFiles) async {
+    return [await query(audioFiles[0])];
   }
 }

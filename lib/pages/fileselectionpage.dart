@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:nfcplayer/interfaces/audiofilepathprovider.dart';
 import 'package:nfcplayer/interfaces/audiometadata.dart';
@@ -85,28 +83,33 @@ class _FileSelectionPageState extends State<FileSelectionPage> {
     );
   }
 
+  bool _metaDataMatchesFilter(AudioMetaData metaData, String filter) {
+    final lowerCaseFilter = filter.toLowerCase();
+    return metaData.trackName.toLowerCase().contains(lowerCaseFilter) ||
+        metaData.album.toLowerCase().contains(lowerCaseFilter) ||
+        metaData.interpret.toLowerCase().contains(lowerCaseFilter);
+  }
+
   Future<List<AudioListEntry>> _prepareAudioFileList() async {
-    List<String> availableAudioFiles =
+    final availableAudioFiles =
         await widget.audioFileProvider.listAllAudioFilePaths();
+    final audioFilesMetaData =
+        await widget.aduioMetaDataProvider.queryList(availableAudioFiles);
+
     List<AudioListEntry> visibleAudioFiles = [];
-    for (final audioFile in availableAudioFiles) {
-      AudioMetaData metaData =
-          await widget.aduioMetaDataProvider.query(File(audioFile));
-      if (filter != null) {
-        final lowerCaseFilter = filter!.toLowerCase();
-        if (!metaData.trackName.toLowerCase().contains(lowerCaseFilter) ||
-            !metaData.album.toLowerCase().contains(lowerCaseFilter) ||
-            !metaData.interpret.toLowerCase().contains(lowerCaseFilter)) {
-          continue;
-        }
+    assert(availableAudioFiles.length == audioFilesMetaData.length);
+    for (int i = 0; i < availableAudioFiles.length; ++i) {
+      final audioFile = availableAudioFiles[i];
+      final metaData = audioFilesMetaData[i];
+      if (filter == null || _metaDataMatchesFilter(metaData, filter!)) {
+        visibleAudioFiles.add(AudioListEntry(
+          title: metaData.trackName,
+          album: metaData.album,
+          interpret: metaData.interpret,
+          filename: audioFile,
+          isSelected: selectedFiles.contains(audioFile),
+        ));
       }
-      visibleAudioFiles.add(AudioListEntry(
-        title: metaData.trackName,
-        album: metaData.album,
-        interpret: metaData.interpret,
-        filename: audioFile,
-        isSelected: selectedFiles.contains(audioFile),
-      ));
     }
     visibleAudioFiles.sort(
       (a, b) {

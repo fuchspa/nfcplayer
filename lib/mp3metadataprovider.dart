@@ -1,36 +1,42 @@
-import 'dart:io';
-
+import 'package:meta_data_retriever/meta_data_retriever.dart';
 import 'package:nfcplayer/interfaces/audiometadata.dart';
 import 'package:nfcplayer/interfaces/audiometadataprovider.dart';
-import 'package:nfcplayer/interfaces/metadatafetcher.dart';
 import 'package:nfcplayer/interfaces/permissionprovider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Mp3MetaDataProvider implements AudioMetaDataProvider {
   final PermissionProvider permissionProvider;
-  final MetaDataFetcher metaDataFetcher;
+  final MetaDataRetriever metaDataRetriever = MetaDataRetriever();
 
   Mp3MetaDataProvider({
     required this.permissionProvider,
-    required this.metaDataFetcher,
   });
 
   @override
-  Future<AudioMetaData> query(File audioFile) async {
+  Future<AudioMetaData> query(String audioFile) async {
+    final metaData = await queryList([audioFile]);
+    return metaData[0];
+  }
+
+  @override
+  Future<List<AudioMetaData>> queryList(List<String> audioFiles) async {
     List<Permission> permissions = [
       Permission.storage,
       Permission.audio,
     ];
     await permissionProvider.request(permissions);
 
-    final metadata = await metaDataFetcher.query(audioFile);
+    final metadata = await metaDataRetriever.getMetaData(audioFiles);
 
-    return AudioMetaData(
-      trackNumber: metadata.trackNumber ?? 0,
-      trackName: metadata.trackName ?? "",
-      interpret: metadata.albumArtistName ?? "",
-      album: metadata.albumName ?? "",
-      albumCover: metadata.albumArt,
-    );
+    return metadata
+        .map<AudioMetaData>(
+          (m) => AudioMetaData(
+            trackNumber: m.trackNumber,
+            trackName: m.title,
+            interpret: m.artist,
+            album: m.album,
+          ),
+        )
+        .toList();
   }
 }

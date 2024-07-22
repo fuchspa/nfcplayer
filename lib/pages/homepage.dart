@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:nfcplayer/interfaces/audiofilepathprovider.dart';
 import 'package:nfcplayer/interfaces/audiometadataprovider.dart';
@@ -53,7 +51,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _handleTrackChange(String track) async {
-    final metadata = await widget.metaDataProvider.query(File(track));
+    final metadata = await widget.metaDataProvider.query(track);
 
     setState(() {
       albumArt = metadata.albumCover != null

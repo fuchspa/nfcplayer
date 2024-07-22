@@ -15,7 +15,6 @@ import 'package:nfcplayer/interfaces/ghettoblaster.dart';
 import 'package:nfcplayer/interfaces/mappingmanager.dart';
 import 'package:nfcplayer/interfaces/nfchandler.dart';
 import 'package:nfcplayer/mp3ghettoblaster.dart';
-import 'package:nfcplayer/mp3metadatafetcher.dart';
 import 'package:nfcplayer/mp3metadataprovider.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -53,7 +52,6 @@ class AndroidDepdencyManager extends DepdencyManager {
     );
     _audioMetaDataProvider = Mp3MetaDataProvider(
       permissionProvider: androidPermissionProvider,
-      metaDataFetcher: Mp3MetaDataFetcher(),
     );
     return this;
   }

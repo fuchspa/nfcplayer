@@ -42,7 +42,6 @@ dependencies:
   path_provider: ^2.1.1
   file: ^7.0.0
   crypto: ^3.0.3
-  flutter_media_metadata: ^1.0.0+1
   meta_data_retriever:
     path: plugins/meta_data_retriever
 
