@@ -31,10 +31,12 @@ class Mp3MetaDataProvider implements AudioMetaDataProvider {
     return metadata
         .map<AudioMetaData>(
           (m) => AudioMetaData(
+            fileName: m.fileName,
             trackNumber: m.trackNumber,
             trackName: m.title,
             interpret: m.artist,
             album: m.album,
+            albumCover: m.cover,
           ),
         )
         .toList();

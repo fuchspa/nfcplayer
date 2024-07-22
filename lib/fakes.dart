@@ -176,6 +176,7 @@ class FakeAudioMetaDataProvider extends AudioMetaDataProvider {
   @override
   Future<AudioMetaData> query(String audioFile) async {
     return AudioMetaData(
+      fileName: "/my_location/my_file",
       trackNumber: 1,
       trackName: "song",
       interpret: "interpret",
