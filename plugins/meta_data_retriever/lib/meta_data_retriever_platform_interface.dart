@@ -1,3 +1,4 @@
+import 'package:meta_data_retriever/model/metadata.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'meta_data_retriever_method_channel.dart';
@@ -23,7 +24,7 @@ abstract class MetaDataRetrieverPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+  Future<List<MetaData>> getMetaData(List<String> files) {
+    throw UnimplementedError('getMetaData() has not been implemented.');
   }
 }

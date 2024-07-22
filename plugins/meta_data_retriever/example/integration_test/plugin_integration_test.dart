@@ -6,20 +6,20 @@
 // For more information about Flutter integration tests, please see
 // https://docs.flutter.dev/cookbook/testing/integration/introduction
 
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 import 'package:meta_data_retriever/meta_data_retriever.dart';
+import 'package:meta_data_retriever/model/metadata.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('getPlatformVersion test', (WidgetTester tester) async {
-    final MetaDataRetriever plugin = MetaDataRetriever();
-    final String? version = await plugin.getPlatformVersion();
+  testWidgets('getMetaData test', (WidgetTester tester) async {
+    final retriever = MetaDataRetriever();
+    final List<MetaData> metaData = await retriever.getMetaData([]);
     // The version string depends on the host platform running the test, so
     // just assert that some non-empty string is returned.
-    expect(version?.isNotEmpty, true);
+    expect(metaData.isEmpty, true);
   });
 }
