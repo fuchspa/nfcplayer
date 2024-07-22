@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nfcplayer/interfaces/audiofilepathprovider.dart';
-import 'package:nfcplayer/interfaces/audiometadata.dart';
 import 'package:nfcplayer/interfaces/audiometadataprovider.dart';
 import 'package:nfcplayer/widgets/audiofilelistview.dart';
 
@@ -83,9 +82,9 @@ class _FileSelectionPageState extends State<FileSelectionPage> {
     );
   }
 
-  bool _metaDataMatchesFilter(AudioMetaData metaData, String filter) {
+  bool _metaDataMatchesFilter(AudioListEntry metaData, String filter) {
     final lowerCaseFilter = filter.toLowerCase();
-    return metaData.trackName.toLowerCase().contains(lowerCaseFilter) ||
+    return metaData.title.toLowerCase().contains(lowerCaseFilter) ||
         metaData.album.toLowerCase().contains(lowerCaseFilter) ||
         metaData.interpret.toLowerCase().contains(lowerCaseFilter);
   }
@@ -95,22 +94,22 @@ class _FileSelectionPageState extends State<FileSelectionPage> {
         await widget.audioFileProvider.listAllAudioFilePaths();
     final audioFilesMetaData =
         await widget.aduioMetaDataProvider.queryList(availableAudioFiles);
+    final visibleAudioFiles = audioFilesMetaData
+        .map<AudioListEntry>(
+          (metaData) => AudioListEntry(
+            title: metaData.trackName,
+            album: metaData.album,
+            interpret: metaData.interpret,
+            filename: metaData.fileName,
+            isSelected: selectedFiles.contains(metaData.fileName),
+          ),
+        )
+        .where(
+          (metaData) =>
+              filter == null || _metaDataMatchesFilter(metaData, filter!),
+        )
+        .toList();
 
-    List<AudioListEntry> visibleAudioFiles = [];
-    assert(availableAudioFiles.length == audioFilesMetaData.length);
-    for (int i = 0; i < availableAudioFiles.length; ++i) {
-      final audioFile = availableAudioFiles[i];
-      final metaData = audioFilesMetaData[i];
-      if (filter == null || _metaDataMatchesFilter(metaData, filter!)) {
-        visibleAudioFiles.add(AudioListEntry(
-          title: metaData.trackName,
-          album: metaData.album,
-          interpret: metaData.interpret,
-          filename: audioFile,
-          isSelected: selectedFiles.contains(audioFile),
-        ));
-      }
-    }
     visibleAudioFiles.sort(
       (a, b) {
         if (sortOrder == 0) {
